@@ -1,5 +1,3 @@
-import requests
-import json
 
 def messages_commands(bot):
 
@@ -24,17 +22,28 @@ def messages_commands(bot):
         help_message = "Los comandos disponibles son:\n/start: Saluda al bot\n/decir: Hace que el bot diga algo\n/afk: Pone tu estado en AFK\n/brb: Pone tu estado en BRB"
         bot.send_message(message.chat.id, help_message)
 
+
+    ## Comandos de exploit y exploitme
+        
+    def error_message(e):
+        if 'bot was kicked from the group chat' in str(e):
+            return "El bot ha sido expulsado del grupo y no puede realizar acciones hasta que sea añadido de nuevo."
+        elif 'user is an administrator of the chat' in str(e):
+            return "No se puede expulsar a un administrador del grupo."
+        else:
+            return error_message(e)
+
     @bot.message_handler(commands=['exploit'])
     def kick_user(message):
         try:
             if message.reply_to_message:
                 bot.kick_chat_member(message.chat.id, message.reply_to_message.from_user.id)
         except Exception as e:
-            bot.send_message(message.chat.id, f"Ocurrió un error: {e}")
+            bot.send_message(message.chat.id, error_message(e))
 
     @bot.message_handler(commands=['exploitme'])
     def kick_self(message):
         try:
             bot.kick_chat_member(message.chat.id, message.from_user.id)
         except Exception as e:
-            bot.send_message(message.chat.id, f"Ocurrió un error: {e}")
+            bot.send_message(message.chat.id, error_message(e))
