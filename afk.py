@@ -28,7 +28,7 @@ def afk_commands(bot):
             return time.time() - afk_users[user_id][0]
         return None
 
-    @bot.message_handler(content_types=['text', 'audio', 'document', 'image', 'sticker', 'video', 'video_note', 'voice', 'location', 'contact'])
+    @bot.message_handler(content_types=['text', 'audio', 'document', 'photo', 'sticker', 'video', 'video_note', 'voice', 'location', 'contact'])
     def handle_all(message):
         user_id = message.from_user.id
         if user_id in afk_users:
