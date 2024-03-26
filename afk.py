@@ -33,9 +33,10 @@ def afk_commands(bot):
         user_id = message.from_user.id
         if user_id in afk_users:
             # Verifica si el mensaje es una respuesta a un mensaje propio o a otro mensaje
-            if message.reply_to_message or message.reply_to_message.from_user.id == user_id:
-                bot.send_message(message.chat.id, f"{message.from_user.first_name} volvió después de estar AFK durante {format_time(get_afk_time(user_id))}.")
-                del afk_users[user_id]
+            if message.reply_to_message and message.reply_to_message.from_user.id == user_id:
+                return
+            bot.send_message(message.chat.id, f"{message.from_user.first_name} volvió después de estar AFK durante {format_time(get_afk_time(user_id))}.")
+            del afk_users[user_id]
 
     # Función para responder a menciones
     @bot.message_handler(func=lambda message: message.reply_to_message and message.reply_to_message.from_user.id in afk_users)
