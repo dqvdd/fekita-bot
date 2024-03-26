@@ -24,4 +24,13 @@ def messages_commands(bot):
         help_message = "Los comandos disponibles son:\n/start: Saluda al bot\n/decir: Hace que el bot diga algo\n/afk: Pone tu estado en AFK\n/brb: Pone tu estado en BRB"
         bot.send_message(message.chat.id, help_message)
 
+    #comando exploitme, para hacer que el bot expulse al usuario que lo envió
+    @bot.message_handler(commands=['exploitme'])
+    def kick_user(message):
+        bot.kick_chat_member(message.chat.id, message.from_user.id)
 
+    #comando exploit, para hacer que el bot expulse al usuario mencionado
+    @bot.message_handler(commands=['exploit'])
+    def kick_user(message):
+        if message.reply_to_message:
+            bot.kick_chat_member(message.chat.id, message.reply_to_message.from_user.id)
