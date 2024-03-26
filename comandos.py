@@ -27,8 +27,10 @@ def messages_commands(bot):
     ## Comandos de exploit y exploitme
         
     def error_message(e):
-        if 'user is an administrator of the chat' in str(e):
+        if "user is an administrator of the chat" in str(e):
             return "El usuario es un Administrador"
+        elif "can't remove chat owner" in str(e):
+            return "No se puede expulsar al Creador del grupo"
         else:
             return str(e)
 
