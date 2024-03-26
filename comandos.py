@@ -1,3 +1,6 @@
+import requests
+import json
+
 def messages_commands(bot):
 
     # Comando Start, para saludar al bot
@@ -20,3 +23,5 @@ def messages_commands(bot):
     def help(message):
         help_message = "Los comandos disponibles son:\n/start: Saluda al bot\n/decir: Hace que el bot diga algo\n/afk: Pone tu estado en AFK\n/brb: Pone tu estado en BRB"
         bot.send_message(message.chat.id, help_message)
+
+

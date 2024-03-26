@@ -28,6 +28,15 @@ def afk_commands(bot):
             return time.time() - afk_users[user_id][0]
         return None
 
+    @bot.message_handler(content_types=['text', 'audio', 'document', 'image', 'sticker', 'video', 'video_note', 'voice', 'location', 'contact'])
+    def handle_all(message):
+        user_id = message.from_user.id
+        if user_id in afk_users:
+            # Verifica si el mensaje es una respuesta a un mensaje propio o a otro mensaje
+            if message.reply_to_message and (message.reply_to_message.from_user.id == user_id or message.reply_to_message.from_user.id != user_id):
+                bot.send_message(message.chat.id, f"{message.from_user.first_name} volvió después de estar AFK durante {format_time(get_afk_time(user_id))}.")
+                del afk_users[user_id]
+
     # Función para responder a menciones
     @bot.message_handler(func=lambda message: message.reply_to_message and message.reply_to_message.from_user.id in afk_users)
     def afk_mention(message):
@@ -56,15 +65,4 @@ def afk_commands(bot):
             time_format.append(f"{int(seconds)}s")
         
         return ' '.join(time_format)
-
-    @bot.message_handler(content_types=['text', 'audio', 'document', 'image', 'sticker', 'video', 'video_note', 'voice', 'location', 'contact'])
-    def handle_all(message):
-        user_id = message.from_user.id
-        if user_id in afk_users:
-            # Verifica si el mensaje es una respuesta a un mensaje propio
-            if message.reply_to_message and message.reply_to_message.from_user.id == user_id:
-                return
-            afk_time, afk_message = afk_users[user_id]
-            bot.send_message(message.chat.id, f"{message.from_user.first_name} volvió después de estar AFK durante {format_time(get_afk_time(user_id))}.")
-            del afk_users[user_id]
 
