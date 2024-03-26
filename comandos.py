@@ -37,9 +37,15 @@ def messages_commands(bot):
     @bot.message_handler(commands=['exploit'])
     def kick_user(message):
         try:
-            if message.reply_to_message:
-                bot.kick_chat_member(message.chat.id, message.reply_to_message.from_user.id)
-                bot.unban_chat_member(message.chat.id, message.reply_to_message.from_user.id)
+            # Obtén información sobre el usuario que envió el mensaje
+            user_status = bot.get_chat_member(message.chat.id, message.from_user.id).status
+            # Verifica si el usuario es un administrador o el creador del chat
+            if user_status in ["administrator", "creator"]:
+                if message.reply_to_message:
+                    bot.kick_chat_member(message.chat.id, message.reply_to_message.from_user.id)
+                    bot.unban_chat_member(message.chat.id, message.reply_to_message.from_user.id)
+            else:
+                bot.send_message(message.chat.id, "Lo siento, solo los administradores pueden usar este comando.")
         except ApiException as e:
             bot.send_message(message.chat.id, error_message(e))
 
