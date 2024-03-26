@@ -15,7 +15,8 @@ def messages_commands(bot):
             else:
                 bot.send_message(message.chat.id, decir_message)
 
-    # Comando Start, para saludar al bot
-    @bot.message_handler(commands=["play"])
-    def play(message):
-        bot.send_message(message.chat.id, "Holanda.")
+    # Comando help, para explicar los comandos disponibles
+    @bot.message_handler(commands=["help"])
+    def help(message):
+        help_message = "Los comandos disponibles son:\n/start: Saluda al bot\n/decir: Hace que el bot diga algo\n/afk: Pone tu estado en AFK\n/brb: Pone tu estado en BRB"
+        bot.send_message(message.chat.id, help_message)
