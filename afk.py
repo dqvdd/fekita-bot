@@ -38,17 +38,15 @@ def afk_commands(bot):
             afk_time, afk_message = afk_users[user_id]
             bot.send_message(message.chat.id, f"{message.from_user.first_name} volvió después de estar AFK durante {format_time(get_afk_time(user_id))}.")
             del afk_users[user_id]
-
-    # Función para responder a menciones
-    @bot.message_handler(func=lambda message: message.reply_to_message and message.reply_to_message.from_user.id in afk_users)
-    def afk_mention(message):
-        user_id = message.reply_to_message.from_user.id
-        afk_time, afk_message = afk_users[user_id]
-        if afk_time:
-            if afk_message:
-                bot.send_message(message.chat.id, f"{message.reply_to_message.from_user.first_name} está AFK desde hace {format_time(get_afk_time(user_id))}. \nRazón: {afk_message}")
-            else:
-                bot.send_message(message.chat.id, f"{message.reply_to_message.from_user.first_name} está AFK desde hace {format_time(get_afk_time(user_id))}.")
+        elif message.reply_to_message and message.reply_to_message.from_user.id in afk_users:
+            # Función para responder a menciones
+            user_id = message.reply_to_message.from_user.id
+            afk_time, afk_message = afk_users[user_id]
+            if afk_time:
+                if afk_message:
+                    bot.send_message(message.chat.id, f"{message.reply_to_message.from_user.first_name} está AFK desde hace {format_time(get_afk_time(user_id))}. \nRazón: {afk_message}")
+                else:
+                    bot.send_message(message.chat.id, f"{message.reply_to_message.from_user.first_name} está AFK desde hace {format_time(get_afk_time(user_id))}.")
 
     # Función para formatear el tiempo AFK
     def format_time(seconds):
